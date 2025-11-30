@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Himanshu Ress - Restaurant</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+  body {
+    background: linear-gradient(120deg, #ffecd2, #fcb69f);
+    color: #333;
+  }
+  
+  /* ===== Header ===== */
+  header {
+    text-align:center;
+    padding:100px 20px;
+    color:white; text-shadow:2px 2px 10px rgba(0,0,0,0.5);
+    background: url('https://img.freepik.com/free-photo/restaurant-interior_1127-3394.jpg?semt=ais_hybrid&w=740&q=80') center/cover no-repeat;
+    position: relative;
+  }
+  header h1 { font-size:60px; }
+  header p { font-size:22px; margin-top:10px; }
+
+  /* ===== Menu Section ===== */
+  .menu-section { width:90%; max-width:1200px; margin:40px auto; }
+  .menu-section h2 { font-size:42px; text-align:center; color:#ff4d4d; margin-bottom:30px; }
+
+  .menu-list {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:25px;
+  }
+  .menu-item {
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display:flex;
+    flex-direction:column;
+  }
+  .menu-item:hover {
+    transform: translateY(-10px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.3);
+  }
+  .menu-item img {
+    width:100%;
+    height:180px;
+    object-fit:cover;
+  }
+  .menu-item h3 { margin:15px 0 5px 0; font-size:22px; color:#333; }
+  .menu-item p { margin-bottom:15px; font-weight:bold; color:#ff4d4d; font-size:18px; }
+  .menu-item button {
+    margin-bottom:15px; padding:10px 20px;
+    border:none; background:#ff4d4d; color:white; font-size:16px;
+    border-radius:10px; cursor:pointer; transition:background 0.3s;
+  }
+  .menu-item button:hover { background:#ff1a1a; }
+
+  /* ===== Cart Section ===== */
+  .cart-section {
+    width:90%; max-width:800px; margin:40px auto; padding:20px;
+    background: rgba(255,255,255,0.9); border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  }
+  .cart-section h2 { text-align:center; font-size:36px; color:#ff4d4d; margin-bottom:20px; }
+  #cartItems { list-style:none; padding:0; margin-bottom:15px; }
+  #cartItems li {
+    padding:12px; margin-bottom:10px;
+    background:#ffe6e6; border-radius:10px; font-weight:bold;
+  }
+  .cart-section h3 { text-align:right; font-size:22px; }
+
+  /* ===== Order Section ===== */
+  .order-section {
+    width:90%; max-width:700px; margin:40px auto; padding:25px;
+    background: rgba(255,255,255,0.9); border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  }
+  .order-section h2 { text-align:center; font-size:36px; color:#ff4d4d; margin-bottom:20px; }
+  .order-section form { display:flex; flex-direction:column; gap:15px; }
+  .order-section input, .order-section textarea {
+    padding:15px; border-radius:10px; border:1px solid #ccc; font-size:16px;
+  }
+  .order-section button {
+    padding:15px; font-size:18px; border-radius:10px; border:none; background:#ff4d4d; color:white; cursor:pointer; transition:background 0.3s;
+  }
+  .order-section button:hover { background:#ff1a1a; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Himanshu Ress 🍽️</h1>
+  <p>Delicious Food, Fast Delivery ❤️🔥</p>
+</header>
+
+<section class="menu-section">
+  <h2>Our Menu</h2>
+  <div class="menu-list" id="menuList"></div>
+</section>
+
+<section class="cart-section">
+  <h2>Your Cart</h2>
+  <ul id="cartItems"></ul>
+  <h3>Total: ₹<span id="totalAmount">0</span></h3>
+</section>
+
+<section class="order-section">
+  <h2>Place Your Order (Cash On Delivery)</h2>
+  <form action="https://formsubmit.co/phantomglows.1729@gmail.com" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <label>Name</label>
+    <input type="text" name="name" required>
+    <label>Phone Number</label>
+    <input type="text" name="phone" required>
+    <label>Address</label>
+    <textarea name="address" required></textarea>
+    <input type="hidden" id="cartData" name="cart">
+    <input type="hidden" id="cartTotal" name="total">
+    <button type="submit">Place Order ❤️🔥</button>
+  </form>
+</section>
+
+<script>
+  const menu = [
+    {name:"Paneer Butter Masala", price:180, img:"https://myfoodstory.com/wp-content/uploads/2021/07/restaurant-style-paneer-butter-masala-2.jpg"},
+    {name:"Veg Biryani", price:150, img:"https://t4.ftcdn.net/jpg/05/70/58/65/360_F_570586537_TnIgWdCnaTYpgg9gsTyloz5bnvfCtdLl.jpg"},
+    {name:"Chicken Biryani", price:200, img:"https://static.vecteezy.com/system/resources/previews/054/743/080/large_2x/the-perfect-dish-of-chicken-biryani-for-your-culinary-inspiration-photo.jpg"},
+    {name:"Margherita Pizza", price:220, img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGl6emElMjBtYXJnaGVyaXRhfGVufDB8fDB8fHww"},
+    {name:"Veg Noodles", price:130, img:"https://www.subbuskitchen.com/wp-content/uploads/2014/01/Veg-Noodles.jpg"},
+    {name:"Chicken Noodles", price:150, img:"https://static.toiimg.com/photo/54458787.cms"},
+    {name:"Pasta Alfredo", price:180, img:"https://img.freepik.com/free-photo/plate-fettuccine-alfredo-with-fresh-parsley_9975-124881.jpg?semt=ais_hybrid&w=740&q=80"},
+    {name:"Chocolate Cake", price:120, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwvHaIOV0b1awoY71O0a9KzCgrduE2VxfNEQ&s"},
+    {name:"Gulab Jamun", price:80, img:"https://www.cadburydessertscorner.com/hs-fs/hubfs/dc-website-2022/articles/soft-gulab-jamun-recipe-for-raksha-bandhan-from-dough-to-syrup-all-you-need-to-know/soft-gulab-jamun-recipe-for-raksha-bandhan-from-dough-to-syrup-all-you-need-to-know.webp?width=1920&height=464&name=soft-gulab-jamun-recipe-for-raksha-bandhan-from-dough-to-syrup-all-you-need-to-know.webp"},
+    {name:"French Fries", price:100, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPiZAN2RcJxyzSlT9aiWNpRDM7bySx_d5hHA&s"},
+    {name:"Cold Coffee", price:90, img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREDsqgAbAe8PW6jDzstosUPkPu7x5OYofNeQ&s"},
+    {name:"Mango Shake", price:120, img:"https://img.freepik.com/premium-photo/fresh-mango-fruit-shake-with-ice-glass-close-up_974629-153069.jpg?semt=ais_hybrid&w=740&q=80"}
+  ];
+
+  let cart = [];
+
+  function renderMenu() {
+    const menuList = document.getElementById('menuList');
+    menuList.innerHTML = '';
+    menu.forEach((item,index)=>{
+      const div = document.createElement('div');
+      div.className='menu-item';
+      div.innerHTML=`
+        <img src="${item.img}" alt="${item.name}">
+        <h3>${item.name}</h3>
+        <p>₹${item.price}</p>
+        <button onclick="addToCart(${index})">Add to Cart</button>
+      `;
+      menuList.appendChild(div);
+    });
+  }
+
+  function addToCart(index){
+    const item = {...menu[index], qty:1};
+    const existing = cart.find(i=>i.name===item.name);
+    if(existing){ existing.qty +=1; }
+    else{ cart.push(item); }
+    renderCart();
+  }
+
+  function renderCart(){
+    const cartItems = document.getElementById('cartItems');
+    cartItems.innerHTML='';
+    let total=0;
+    cart.forEach(item=>{
+      const li=document.createElement('li');
+      li.textContent=`${item.name} x ${item.qty} = ₹${item.price*item.qty}`;
+      cartItems.appendChild(li);
+      total+=item.price*item.qty;
+    });
+    document.getElementById('totalAmount').textContent=total;
+    document.getElementById('cartData').value=JSON.stringify(cart);
+    document.getElementById('cartTotal').value=total;
+  }
+
+  renderMenu();
+</script>
+
+</body>
+</html>
+
